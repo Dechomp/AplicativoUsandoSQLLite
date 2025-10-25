@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +18,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //Criando os componentes
-    Button btTelaCadastrar;
+    Button btTelaCadastrar, btEntrar, btFechar;
+
+    EditText edUsuario, edSenha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +31,14 @@ public class LoginActivity extends AppCompatActivity {
 
         //Vincular os componentes
         btTelaCadastrar = findViewById(R.id.btTelaCadastrar);
+        btEntrar = findViewById(R.id.btEntrar);
+        btFechar = findViewById(R.id.btFechar);
 
-        //Quando cliclar no botão
+        edUsuario = findViewById(R.id.edUsuarioEntrar);
+        edSenha = findViewById(R.id.edSenhaEntrar);
+
+
+        //Quando cliclar no botão de cadastrar
         btTelaCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,6 +54,26 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(telaCadastroAdmin);
 
                 //Aqui em espcifico, eu não quero fechar a tela de login, por isto, não chamarei o finish()
+            }
+        });
+
+        //Quando clicar no botão de entrar
+        btEntrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Verifica se há campos vazios]
+                //Variáveis
+                String usuario, senha;
+
+                //Receber o texto
+                usuario = edUsuario.getText().toString();
+                senha = edSenha.getText().toString();
+
+                if (usuario.isEmpty() || senha.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Campos vazios, digite novamente", Toast.LENGTH_SHORT).show();
+                }
+                //Se não tiver, verifica se o usuário existe
+                
             }
         });
 

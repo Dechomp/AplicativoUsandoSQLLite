@@ -11,9 +11,15 @@ public class Admin {
         //Construtor vazio
     }
 
-    //Construtor com parâmetros
+    //Construtor com parâmetros e ID
     public Admin(int id, String nome, String senha) {
         this.id = id;
+        this.nome = nome;
+        this.senha = senha;
+    }
+
+    //Construtor com parâmetros e sem ID
+    public Admin(String nome, String senha) {
         this.nome = nome;
         this.senha = senha;
     }

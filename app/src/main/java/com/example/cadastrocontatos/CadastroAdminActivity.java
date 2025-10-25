@@ -1,6 +1,7 @@
 package com.example.cadastrocontatos;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.cadastrocontatos.classesDAO.AdminDAO;
+import com.example.cadastrocontatos.classesDTO.Admin;
 
 public class CadastroAdminActivity extends AppCompatActivity {
 
@@ -41,7 +45,7 @@ public class CadastroAdminActivity extends AppCompatActivity {
                 //Recebendo os textos
                 nome = edNome.getText().toString();
                 senha = edSenha.getText().toString();
-                confimarSenha = edConfirmarSenha.toString();
+                confimarSenha = edConfirmarSenha.getText().toString();
 
                 //Verifico se os campos estão vazios
                 if (nome.isEmpty() || senha.isEmpty() || confimarSenha.isEmpty()){
@@ -52,11 +56,45 @@ public class CadastroAdminActivity extends AppCompatActivity {
                 //Assim eu checo a igualdade: senha == confimarSenha
                 //Assim verificar se a senha contem a senha, senha.contains(confimarSenha) (jeito errado pois pode ter mais que isto)
                 //OU senha.equals(confirmarSenha) que checa se o que está em senha é equivalente à o que há em confimar senha
-                else if (senha.equals(confimarSenha)){
+                else if (!senha.equals(confimarSenha)){
                     //Mostra a mensagem
                     Toast.makeText(v.getContext(), "As senhas não batem!", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    AdminDAO admDAO = null;
+                    try {
+                        //Se tudo estiver certo
+                        //Cria a classe DAO
+                        admDAO = new AdminDAO(v.getContext());
+
+                        //Primeiro checa se aquele Adm já existe
+                        //Se sim, mostra a mensagem
+                        if (admDAO.checarExistencia(nome)){
+                            Toast.makeText(v.getContext(), "Já existe um adm com este nome", Toast.LENGTH_SHORT).show();;
+                        }
+                        //Se não existir, cria o ADM
+                        else{
+                            Admin adm = new Admin(nome, senha);
+                            try {
+                                admDAO.criarAdmin(adm);
+                                Toast.makeText(v.getContext(), "Admin criado", Toast.LENGTH_SHORT).show();
+                                Log.e("Banco de dados", "Sucesso");
+                                //finish();
+                            }
+                            catch (Exception ex){
+                                Toast.makeText(v.getContext(),"Erro ao criar admin, erro: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                                //Manda no log o erro
+                                Log.e("Banco de dados", ex.getMessage());
+                            }
+
+
+                        }
+                    }
+                    catch (Exception ex){
+                        Toast.makeText(v.getContext(),"Erro ao criar admin, erro: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("Banco de dados", ex.getMessage());
+                    }
+
 
                 }
 
