@@ -13,6 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.cadastrocontatos.classesDAO.AdminDAO;
+import com.example.cadastrocontatos.classesDTO.Admin;
+
 public class LoginActivity extends AppCompatActivity {
 
 
@@ -73,7 +76,49 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Campos vazios, digite novamente", Toast.LENGTH_SHORT).show();
                 }
                 //Se não tiver, verifica se o usuário existe
-                
+                else{
+                    //Cria a classe DAO
+                    AdminDAO adminDAO = new AdminDAO(v.getContext());
+
+                    //Verifica se o usuário existe
+                    if(adminDAO.checarExistencia(usuario)){
+
+                        //Se sim, verifica a senha
+
+                        //Primeiro cria a classse Admin
+                        Admin admin = new Admin(usuario, senha);
+
+
+                        //Verifica se a senha está correta
+                        if(adminDAO.checarUsuarioSenha(admin)){
+                            //Se sim, mostra a mensagem
+
+                            Toast.makeText(v.getContext(), "Login realizado com sucesso, bem-vindo " + admin.getNome() + "!" , Toast.LENGTH_SHORT).show();
+
+                            //Manda para próxima tela
+                            Intent telaPrincipal;
+                            telaPrincipal = new Intent(v.getContext(), MainActivity.class);
+                            startActivity(telaPrincipal);
+
+                            //Salva o admin logado
+                            Global.adm = admin;
+
+                            //Fecha a tela de login
+                            finish();
+                        }
+                        //Se não estiver
+                        else{
+                            //Mostra a mensagem
+                            Toast.makeText(v.getContext(), "Senha incorreta", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                    //Se não exixtir
+                    else{
+                        //Mostra aa mensagem
+                        Toast.makeText(v.getContext(), "Usuário ou senha incorreto", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 

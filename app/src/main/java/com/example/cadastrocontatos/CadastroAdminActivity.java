@@ -79,7 +79,7 @@ public class CadastroAdminActivity extends AppCompatActivity {
                                 admDAO.criarAdmin(adm);
                                 Toast.makeText(v.getContext(), "Admin criado", Toast.LENGTH_SHORT).show();
                                 Log.e("Banco de dados", "Sucesso");
-                                //finish();
+                                finish();
                             }
                             catch (Exception ex){
                                 Toast.makeText(v.getContext(),"Erro ao criar admin, erro: " + ex.getMessage(), Toast.LENGTH_SHORT).show();

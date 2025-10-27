@@ -92,7 +92,7 @@ public class AdminDAO extends SQLiteOpenHelper {
                 //Dados (SELECT)
                 campos,
                 //Condição(WHERE)
-                "nome = ?",
+                "adm_nome = ?",
                 //Dado que vai no lugar do WHERE
                 parametro,
                 //Outros,(Group by, having, oder by) neste ordem, mas no caso, tudo vazio
@@ -162,6 +162,60 @@ public class AdminDAO extends SQLiteOpenHelper {
             }
         }
         return false;
+    }
+
+    //Função para checar Usuário e senha
+    public Boolean checarUsuarioSenha(Admin adm){
+        //Crio um admin vazio
+        Admin admExistente = null;
+
+        //Crio o parâmetro para a busca
+        String parametro[] = {adm.getNome(), adm.getSenha()};
+
+        //Campos de quero
+        String campos[] = {"adm_id, adm_nome, adm_senha"};
+
+        //Contexto do banco
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Cria um cursor(quantidade de dados recebidos) e faz o select
+        Cursor cursor = db.query(
+                //Tabela(FROM)
+                NOME_TABELA,
+                //Dados (SELECT)
+                campos,
+                //Condição(WHERE)
+                "adm_nome = ? AND adm_senha = ?",
+                //Dado que vai no lugar do WHERE
+                parametro,
+                //Outros,(Group by, having, oder by) neste ordem, mas no caso, tudo vazio
+                null,
+                null,
+                null
+        );
+        //Se der certo, haverá como mover para a próxima linha
+        if (cursor.moveToNext()){
+            admExistente = new Admin(
+                    //ID
+                    cursor.getInt(0),
+                    //Nome
+                    cursor.getString(1),
+                    //Senha
+                    cursor.getString(2)
+            );
+        }
+
+
+        //Fecha a conexão com o banco
+        db.close();
+
+        if (admExistente != null){
+                return true;
+        }
+
+        return false;
+        //Quando chamar, se o retorno for vazio, anuncia que deu errado a busca
+        //Se não for, continua normal
     }
 
     //U de update
