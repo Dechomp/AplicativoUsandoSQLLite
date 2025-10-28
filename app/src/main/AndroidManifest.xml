@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CadastroContatos">
         <activity
+            android:name=".CadastrarContatoActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroAdminActivity"
             android:exported="false" />
         <activity

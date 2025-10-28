@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ContatoDAO extends SQLiteOpenHelper {
     //Crio componentes para o banco de dados
     public static final String NOME_BANCO = "dbCadastrarContatos";
-    public static final int VERSAO = 1;
+    public static final int VERSAO = 2;
     public static final String NOME_TABELA = "contato";
     public static final String COLUNA_ID = "ctt_id";
     public static final String COLUNA_NOME = "ctt_nome";
@@ -48,6 +48,8 @@ public class ContatoDAO extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Nada por enquanto
+        db.execSQL("DROP TABLE IF EXISTS " + NOME_TABELA);
+        onCreate(db);
     }
 
     //CRUD
