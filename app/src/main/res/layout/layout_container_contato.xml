@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCelular" />
 
     <Button
-        android:id="@+id/btAtualizarContato"
+        android:id="@+id/btTelaAtualizarContato"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="208dp"
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/dvDivisor"
         android:layout_width="409dp"
         android:layout_height="1dp"
         android:layout_marginTop="264dp"

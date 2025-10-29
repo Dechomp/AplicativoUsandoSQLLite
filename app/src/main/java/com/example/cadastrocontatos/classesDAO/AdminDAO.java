@@ -9,13 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.cadastrocontatos.Global;
 import com.example.cadastrocontatos.classesDTO.Admin;
+
+import java.util.Objects;
 
 //Extende o SQL lite
 public class AdminDAO extends SQLiteOpenHelper {
     //Crio componentes para o banco de dados
     public static final String NOME_BANCO = "dbCadastrarContatos";
-    public static final int VERSAO = 1;
+    public static final int VERSAO = Global.versao;
     public static final String NOME_TABELA = "admin";
     public static final String COLUNA_ID = "adm_id";
     public static final String COLUNA_NOME = "adm_nome";
@@ -193,8 +196,8 @@ public class AdminDAO extends SQLiteOpenHelper {
                 null,
                 null
         );
-        //Se der certo, haverá como mover para a próxima linha
-        if (cursor.moveToNext()){
+        //Se der certo, haverá como mover para a primeira linha
+        if (cursor.moveToFirst()){
             admExistente = new Admin(
                     //ID
                     cursor.getInt(0),
@@ -209,11 +212,8 @@ public class AdminDAO extends SQLiteOpenHelper {
         //Fecha a conexão com o banco
         db.close();
 
-        if (admExistente != null){
-                return true;
-        }
-
-        return false;
+        //Retorna verdadeiro ou falso com as codinções no próprio return
+        return admExistente != null && Objects.equals(admExistente.getNome(), adm.getNome()) && Objects.equals(admExistente.getSenha(), adm.getSenha());
         //Quando chamar, se o retorno for vazio, anuncia que deu errado a busca
         //Se não for, continua normal
     }
@@ -260,7 +260,7 @@ public class AdminDAO extends SQLiteOpenHelper {
                 //Nome da tabela
                 NOME_TABELA,
                 //Condição
-                "id = ?",
+                "adm_id = ?",
                 //Parâmetro
                 parametro
         );

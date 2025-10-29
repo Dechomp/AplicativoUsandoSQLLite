@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(telaPrincipal);
 
                             //Salva o admin logado
-                            Global.adm = admin;
+                            Global.adm = adminDAO.buscarAdmin(usuario);
 
                             //Fecha a tela de login
                             finish();
@@ -119,6 +119,13 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(v.getContext(), "Usuário ou senha incorreto", Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
+        });
+
+        btFechar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAndRemoveTask();
             }
         });
 

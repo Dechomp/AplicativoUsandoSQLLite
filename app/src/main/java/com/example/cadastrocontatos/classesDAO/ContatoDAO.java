@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.example.cadastrocontatos.Global;
 import com.example.cadastrocontatos.classesDTO.Contato;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class ContatoDAO extends SQLiteOpenHelper {
     //Crio componentes para o banco de dados
     public static final String NOME_BANCO = "dbCadastrarContatos";
-    public static final int VERSAO = 2;
+    public static final int VERSAO = Global.versao;
     public static final String NOME_TABELA = "contato";
     public static final String COLUNA_ID = "ctt_id";
     public static final String COLUNA_NOME = "ctt_nome";
@@ -215,6 +216,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         //Fecha a conexão
         db.close();
     }
+    //FUnção para atualizar o adm id (Só vou usar quando o usuário colocar para desfazer o apagamento da conta)
 
     //D de delete
     public void excluirContato(int id){
@@ -239,5 +241,6 @@ public class ContatoDAO extends SQLiteOpenHelper {
         //Fecha a conexão
         db.close();
     }
+
 
 }

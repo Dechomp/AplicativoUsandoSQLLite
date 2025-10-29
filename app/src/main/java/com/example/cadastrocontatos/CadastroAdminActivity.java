@@ -21,7 +21,7 @@ public class CadastroAdminActivity extends AppCompatActivity {
     //Criar os componentes
     EditText edNome, edSenha, edConfirmarSenha;
 
-    Button btCadastrar;
+    Button btCadastrar, btVoltar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,10 @@ public class CadastroAdminActivity extends AppCompatActivity {
         edConfirmarSenha = findViewById(R.id.edConfirmarSenhaAdmin);
 
         btCadastrar = findViewById(R.id.btCadastrarAdmin);
+
+        btVoltar = findViewById(R.id.btVoltarLogin);
+
+
 
         btCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +102,13 @@ public class CadastroAdminActivity extends AppCompatActivity {
 
                 }
 
+            }
+        });
+
+        btVoltar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
