@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -40,6 +42,14 @@ public class AdminDAO extends SQLiteOpenHelper {
                     COLUNA_NOME    + " TEXT NOT NULL, " +
                     COLUNA_SENHA   + " TEXT NOT NULL) "
                 );
+
+        db.execSQL("CREATE TABLE contato (" +
+                "ctt_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ctt_nome TEXT NOT NULL, " +
+                "ctt_celular TEXT NOT NULL, " +
+                "ctt_email TEXT NOT NULL, " +
+                "adm_id INTEGER NOT NULL)"
+        );
     }
 
     //Função obrigatória e extendida
@@ -47,6 +57,9 @@ public class AdminDAO extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Quando atualiza a tabela
         //Sem versões adicionais
+
+        db.execSQL("DROP TABLE IF EXISTS " + NOME_TABELA);
+        onCreate(db);
     }
 
     //Funções criadas relacionadas ao crud
@@ -54,6 +67,8 @@ public class AdminDAO extends SQLiteOpenHelper {
     //C de create
     public void criarAdmin (Admin adm){
         //Só funcionar se não exitir aquele admin
+
+        Log.e("Prametros de criação: ", "Nome: " + adm.getNome() + " Senha: " + adm.getSenha());
 
         //Crio a variável que conecta com o banco, e passo o contexto dele
         SQLiteDatabase db = this.getWritableDatabase();
@@ -104,7 +119,7 @@ public class AdminDAO extends SQLiteOpenHelper {
                 null
                 );
         //Se der certo, haverá como mover para a próxima linha
-        if (cursor.moveToNext()){
+        if (cursor.moveToFirst()){
             adm = new Admin(
                     //ID
                     cursor.getInt(0),
@@ -114,6 +129,9 @@ public class AdminDAO extends SQLiteOpenHelper {
                     cursor.getString(2)
             );
         }
+
+        Log.e("Buscar Nome: ", adm.getNome() + " Senha: " + adm.getSenha());
+        Log.e("id: ", "" + adm.getId());
 
         //Fecha a conexão com o banco
         db.close();
@@ -169,6 +187,8 @@ public class AdminDAO extends SQLiteOpenHelper {
 
     //Função para checar Usuário e senha
     public Boolean checarUsuarioSenha(Admin adm){
+
+        Log.e("Parametro: ", "Usuário: " + adm.getNome() + " Senha: " + adm.getSenha());
         //Crio um admin vazio
         Admin admExistente = null;
 
@@ -206,8 +226,14 @@ public class AdminDAO extends SQLiteOpenHelper {
                     //Senha
                     cursor.getString(2)
             );
+
+            Log.e("Cursor id logado: ", "" + cursor.getInt(0));
+            Log.e("Cursor Nome logado: ", "" + cursor.getString(1) + " Senha: " + cursor.getString(2));
+            Log.e("Cursor Senha logada: ", "" + cursor.getString(2));
+
         }
 
+        Log.e("id logado: ", "" + admExistente.getId());
 
         //Fecha a conexão com o banco
         db.close();

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -128,36 +129,58 @@ public class ContatoDAO extends SQLiteOpenHelper {
 
     //Lista de contatos
     public ArrayList<Contato> listarContatos(int admId){
+        Log.e("Cursor Chegou na função: ", "chegou na função");
         //Crio um contato vazio
         Contato ctt = null;
 
+        Log.e("Cursor admid na função: ",admId + "");
         //Crio uma lista vazia
         ArrayList<Contato> contatos = new ArrayList<>();
 
         //Crio os parâmetros
         String parametro[] = {String.valueOf(admId)};
 
+        Log.e("Cursor Parametros para achar o contato", parametro[0]);
         //Quais dados quero receber
         String campos[] = {"ctt_id, ctt_nome, ctt_celular, ctt_email, adm_id"};
 
+        Log.e(" Cursor Campos para achar o contato", campos[0]);
+
+        Log.e("Cursor admid parametro: ", "" + admId);
+
         //Conecto ao banco
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cr = null;
 
-        //Crio o cursor e faço o select
-        Cursor  cr = db.query(
-                //Tabela (FROM)
-                NOME_TABELA,
-                //Dados (SELECT)
-                campos,
-                //Condição (WHERE)
-                "adm_id = ?",
-                //Parâmetro no lugar do "?"
-                parametro,
-                //Outros (Group by, having, order by"
-                null,
-                null,
-                null
-        );
+        Cursor tabelas = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        while (tabelas.moveToNext()) {
+            Log.e("TABELAS EXISTENTES", tabelas.getString(0));
+        }
+        tabelas.close();
+
+        try{
+            //Crio o cursor e faço o select
+            cr = db.query(
+                    //Tabela (FROM)
+                    NOME_TABELA,
+                    //Dados (SELECT)
+                    campos,
+                    //Condição (WHERE)
+                    "adm_id = ?",
+                    //Parâmetro no lugar do "?"
+                    parametro,
+                    //Outros (Group by, having, order by"
+                    null,
+                    null,
+                    null
+            );
+        }
+        catch (Exception ex){
+            Log.e("Erro: do cursor", ex.getMessage());
+        }
+
+
+        Log.e("quantidade no cursor ", "" + cr.getCount());
 
         //Se der certo, haverá como mover para a próxima linha
         while (cr.moveToNext()){
@@ -169,6 +192,8 @@ public class ContatoDAO extends SQLiteOpenHelper {
                     cr.getString(3),
                     cr.getInt(4)
             );
+
+            Log.e("admid: ", "" + ctt.getAdmId());
 
             //Adiciono a lista
             contatos.add(ctt);
@@ -216,6 +241,7 @@ public class ContatoDAO extends SQLiteOpenHelper {
         //Fecha a conexão
         db.close();
     }
+
     //FUnção para atualizar o adm id (Só vou usar quando o usuário colocar para desfazer o apagamento da conta)
     public void atualizarAdmId(int admIdAnterior, int admIdNovo){
         //Abro a conexão

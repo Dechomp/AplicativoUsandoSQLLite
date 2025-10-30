@@ -61,16 +61,20 @@ public class MainActivity extends AppCompatActivity {
         //Crio um objeto da classe ContatoDAO para conectar ao banco de dados
         ContatoDAO cttDAO = new ContatoDAO(this);
 
+        Log.e("admid logado: ", "" + Global.adm.getId());
+
         //Crio uma lista e recebo as informações dos contatos criados no Banco de dados passando o
         // id do usuário
 
         ArrayList<Contato> contatos = null;
         try {
             contatos = cttDAO.listarContatos(Global.adm.getId());
+            Log.e("admid logado se deu certo: ", "" + Global.adm.getId());
         }
         catch (Exception ex){
-            Toast.makeText(this, "Receber os contatos" + ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Receber os contatos " + ex.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("Erro: ", ex.getMessage());
+            Log.e("admid logado não deu certo: ", "" + Global.adm.getId());
         }
 
 
@@ -83,13 +87,20 @@ public class MainActivity extends AppCompatActivity {
            try {
                for (int i = 0; i < contatos.size(); i++){
                    duplicarComponente(contatos.get(i));
+                   Log.e("admid logado deu certo componente: ", "" + Global.adm.getId());
                }
            }
            catch (Exception ex){
                Toast.makeText(this, "Erro ao listar os contatos" + ex.getMessage(), Toast.LENGTH_SHORT).show();
-               Log.e("Erro: ", ex.getMessage());
+               Log.e("Erro listar contatos: ", ex.getMessage());
+               Log.e("Erro duplicar componenetes: ", Global.adm.getId() + "");
+
            }
 
+       }
+       else{
+           Toast.makeText(this, "Não há contatos", Toast.LENGTH_SHORT).show();
+           Log.e("Erro sem contatos: ", "sem contatos");
        }
 
         //Quando clicar no botão de criar contato
@@ -138,9 +149,6 @@ public class MainActivity extends AppCompatActivity {
 
                             //Chamo a função de apagar a conta
                             admDAO.excluirAdmin(Global.adm.getId());
-
-                            //Variável para ver se o usuário realmente quer apagar a conta
-                            Boolean apagar = true;
 
                             //Pergunto se ele quer desfaze a ação
                             Snackbar.make(findViewById(R.id.main), "Conta apagada!", Snackbar.LENGTH_LONG)
@@ -211,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void duplicarComponente(Contato ctt){
+
+
         TextView tvNome, tvEmail, tvCelular, tvNomeCadastrado, tvEmailCadastrado, tvCelularCadastrado;
         Button btAtualizarContato, btDeletarContato;
 

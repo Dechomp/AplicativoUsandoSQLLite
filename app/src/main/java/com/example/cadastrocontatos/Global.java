@@ -13,7 +13,7 @@ public class Global {
     public static Admin adm = null;
 
     //Versão do banco de dados
-    public static int versao = 2;
+    public static int versao = 5;
 
     //Contato a ser atualizado/deletado
     public static Contato contato = null;

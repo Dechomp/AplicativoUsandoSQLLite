@@ -2,6 +2,7 @@ package com.example.cadastrocontatos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Toast.makeText(v.getContext(), "Login realizado com sucesso, bem-vindo " + admin.getNome() + "!" , Toast.LENGTH_SHORT).show();
 
+
                             //Manda para próxima tela
                             Intent telaPrincipal;
                             telaPrincipal = new Intent(v.getContext(), MainActivity.class);
@@ -102,6 +104,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             //Salva o admin logado
                             Global.adm = adminDAO.buscarAdmin(usuario);
+
+                            Log.e("ID do admin", "" + adminDAO.buscarAdmin(usuario).getId());
+
+                            Log.e("admid logado: ", "" + Global.adm.getId());
 
                             //Fecha a tela de login
                             finish();
