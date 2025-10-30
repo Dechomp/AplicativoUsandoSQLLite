@@ -94,6 +94,9 @@ public class AtualizarSenhaAdminActivity extends AppCompatActivity {
                     //Chamo a função de ir para próxima tela
                     Global.navegarTela(v, MainActivity.class);
 
+                    //Mostro a mensagem
+                    Toast.makeText(v.getContext(), "Senha atualizada com sucesso!", Toast.LENGTH_SHORT).show();
+
                     //Fecho esta tela
                     finish();
                 }

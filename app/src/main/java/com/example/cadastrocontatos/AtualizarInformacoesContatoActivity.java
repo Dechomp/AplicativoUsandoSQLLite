@@ -79,10 +79,13 @@ public class AtualizarInformacoesContatoActivity extends AppCompatActivity {
                     ContatoDAO cttDAO = new ContatoDAO(v.getContext());
 
                     //Chamo a função
-                    cttDAO.criarContato(Global.contato);
+                    cttDAO.atualizarContato(Global.contato);
 
                     //Chamo a função global para voltar para a tela principal
                     Global.navegarTela(v, MainActivity.class);
+
+                    //Mostro a mensagem de sucessso
+                    Toast.makeText(v.getContext(), "Contato atualizado com sucesso!", Toast.LENGTH_SHORT).show();
 
                     //Fecho esta tela
                     finish();

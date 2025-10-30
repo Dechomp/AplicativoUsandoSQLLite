@@ -217,6 +217,36 @@ public class ContatoDAO extends SQLiteOpenHelper {
         db.close();
     }
     //FUnção para atualizar o adm id (Só vou usar quando o usuário colocar para desfazer o apagamento da conta)
+    public void atualizarAdmId(int admIdAnterior, int admIdNovo){
+        //Abro a conexão
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Crio os valores a serem alterados
+        ContentValues valores = new ContentValues();
+
+        //Adiciono o valor do novo id do adm
+        valores.put(COLUNA_ADMID, admIdNovo);
+
+        //Parâmetro para saber qual vai ser alterado (o adm antigo)
+        String parametro[] = {String.valueOf(admIdAnterior)};
+
+        //Atualizo todos os dados que possuem o mesmo adm_id do antigo para o novo
+        db.update(
+                //Nome da tabela (UPDATE)
+                NOME_TABELA,
+
+                //SET valores a serem alterados
+                valores,
+
+                //WHERE (Condição)
+                "adm_id = ?",
+
+                //Valor que vai no lugar do "?"
+                parametro);
+
+        //Fecha a conexão
+        db.close();
+    }
 
     //D de delete
     public void excluirContato(int id){
@@ -233,6 +263,30 @@ public class ContatoDAO extends SQLiteOpenHelper {
 
                 //Condição
                 "ctt_id = ?",
+
+                //Parâmetro
+                parametro
+        );
+
+        //Fecha a conexão
+        db.close();
+    }
+
+    //Função para excluir os contatos relacionado a conta do usuário
+    public void excluirContatosAdmin(int admId){
+        //Abre a conexão
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //Cria os parâmetros
+        String parametro[] = {String.valueOf(admId)};
+
+        //Manda deletar o contato
+        db.delete(
+                //Nome da tabela
+                NOME_TABELA,
+
+                //Condição
+                "adm_id = ?",
 
                 //Parâmetro
                 parametro

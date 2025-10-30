@@ -78,6 +78,9 @@ public class CadastrarContatoActivity extends AppCompatActivity {
                         //Chamo a função para cadastrar o contato
                         cttDAO.criarContato(ctt);
 
+                        //Mostro a mensagem
+                        Toast.makeText(v.getContext(), "Contato cadastrado com sucesso!", Toast.LENGTH_SHORT).show();
+
                         //Chamo a função para voltar para a tela principal
                         voltarTelaPrincipal();
                     }

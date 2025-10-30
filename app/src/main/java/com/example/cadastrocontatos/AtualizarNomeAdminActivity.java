@@ -96,6 +96,9 @@ public class AtualizarNomeAdminActivity extends AppCompatActivity {
                     //Chamo a função de ir para próxima tela
                     Global.navegarTela(v, MainActivity.class);
 
+                    //Mostro a mensagem de sucesso
+                    Toast.makeText(v.getContext(), "Nome atualizado com sucesso!", Toast.LENGTH_SHORT).show();
+
                     //Fecho esta tela
                     finish();
                 }

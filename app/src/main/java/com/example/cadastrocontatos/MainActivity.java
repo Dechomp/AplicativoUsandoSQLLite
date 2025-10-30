@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     //Crio os componentes
     LinearLayout lnContainer;
 
-    Button btAdicionarContato, btAtualizarInformacoes, btApagarConta;
+    Button btAdicionarContato, btAtualizarInformacoes, btApagarConta, btSairConta;
 
     TextView tvUsuarioAtual;
 
@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btAdicionarContato = findViewById(R.id.btAdicionarContato);
         btAtualizarInformacoes = findViewById(R.id.btAtualizarInformacoes);
         btApagarConta = findViewById(R.id.btApagarConta);
+        btSairConta = findViewById(R.id.btSairConta);
 
         tvUsuarioAtual = findViewById(R.id.tvUsuarioAtual);
 
@@ -132,8 +133,14 @@ public class MainActivity extends AppCompatActivity {
                             //Crio uma instancia da classe AdmDAO
                             AdminDAO admDAO = new AdminDAO(v.getContext());
 
+                            //Recebo o antigo ID antes de ser apagado
+                            int idAntigo = Global.adm.getId();
+
                             //Chamo a função de apagar a conta
                             admDAO.excluirAdmin(Global.adm.getId());
+
+                            //Variável para ver se o usuário realmente quer apagar a conta
+                            Boolean apagar = true;
 
                             //Pergunto se ele quer desfaze a ação
                             Snackbar.make(findViewById(R.id.main), "Conta apagada!", Snackbar.LENGTH_LONG)
@@ -143,19 +150,30 @@ public class MainActivity extends AppCompatActivity {
                                         public void onClick(View v) {
                                             //Se ele clicar que sim, refaço a conta no banco,
                                             // novamente
+
+                                            //Crio um novo admin
                                             admDAO.criarAdmin(Global.adm);
+
+                                            //Recebo o "novo" adm
+                                            Global.adm = admDAO.buscarAdmin(Global.adm.getNome());
 
                                             //Por enquanto, ele vai perder todos os contato, depois
                                             //adiciono uma função para mudar o id de adm dos contatos
+
+                                            //Atualizo o adm_id dos antigos contatos
+                                            cttDAO.atualizarAdmId(idAntigo, Global.adm.getId());
                                         }
                                     }
                             )
-                            //Adiciono um roll back caso ele não aperte em desfazer
+                            //Adiciono um roll back quando o Sabcj Bar acabar
                                     .addCallback(new Snackbar.Callback() {
                                         @Override
                                         public void onDismissed(Snackbar transientBottomBar, int event) {
                                             // Só navega quando o Snackbar for fechado
                                             navegarTela(LoginActivity.class);
+
+                                            //Se não mudou o id do adm nos contatos, eu apgo eles
+                                            cttDAO.excluirContatosAdmin(idAntigo);
                                         }
                                     })
                             //Mostro o snack bar
@@ -168,6 +186,18 @@ public class MainActivity extends AppCompatActivity {
                         //Mostro o Alert
                         .show();
 
+            }
+        });
+
+        //Quando sair da conta
+        btSairConta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Apaga do global o admin atual
+                Global.adm = null;
+
+                //Chamo a função de navegação de tela
+                navegarTela(LoginActivity.class);
             }
         });
 
