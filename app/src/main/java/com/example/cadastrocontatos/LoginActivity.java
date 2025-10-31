@@ -87,36 +87,41 @@ public class LoginActivity extends AppCompatActivity {
                         //Se sim, verifica a senha
 
                         //Primeiro cria a classse Admin
-                        Admin admin = new Admin(usuario, senha);
+                        Admin admin = new Admin(0, usuario, senha);
+
+                        try{
+                            //Verifica se a senha está correta
+                            if(adminDAO.checarUsuarioSenha(admin)){
+                                //Se sim, mostra a mensagem
+
+                                Toast.makeText(v.getContext(), "Login realizado com sucesso, bem-vindo " + admin.getNome() + "!" , Toast.LENGTH_SHORT).show();
 
 
-                        //Verifica se a senha está correta
-                        if(adminDAO.checarUsuarioSenha(admin)){
-                            //Se sim, mostra a mensagem
+                                //Manda para próxima tela
+                                Intent telaPrincipal;
+                                telaPrincipal = new Intent(v.getContext(), MainActivity.class);
+                                startActivity(telaPrincipal);
 
-                            Toast.makeText(v.getContext(), "Login realizado com sucesso, bem-vindo " + admin.getNome() + "!" , Toast.LENGTH_SHORT).show();
+                                //Salva o admin logado
+                                Global.adm = adminDAO.buscarAdmin(usuario);
 
+                                Log.e("ID do admin", "" + adminDAO.buscarAdmin(usuario).getId());
 
-                            //Manda para próxima tela
-                            Intent telaPrincipal;
-                            telaPrincipal = new Intent(v.getContext(), MainActivity.class);
-                            startActivity(telaPrincipal);
+                                Log.e("admid logado: ", "" + Global.adm.getId());
 
-                            //Salva o admin logado
-                            Global.adm = adminDAO.buscarAdmin(usuario);
-
-                            Log.e("ID do admin", "" + adminDAO.buscarAdmin(usuario).getId());
-
-                            Log.e("admid logado: ", "" + Global.adm.getId());
-
-                            //Fecha a tela de login
-                            finish();
+                                //Fecha a tela de login
+                                finish();
+                            }
+                            //Se não estiver
+                            else{
+                                //Mostra a mensagem
+                                Toast.makeText(v.getContext(), "Senha incorreta", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        //Se não estiver
-                        else{
-                            //Mostra a mensagem
-                            Toast.makeText(v.getContext(), "Senha incorreta", Toast.LENGTH_SHORT).show();
+                        catch (Exception ex){
+                            Log.e("Erro no usuário correto com senha errada", ex.getMessage());
                         }
+
 
                     }
                     //Se não exixtir

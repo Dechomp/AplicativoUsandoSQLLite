@@ -196,28 +196,38 @@ public class AdminDAO extends SQLiteOpenHelper {
         String parametro[] = {adm.getNome(), adm.getSenha()};
 
         //Campos de quero
-        String campos[] = {"adm_id, adm_nome, adm_senha"};
+        String campos[] = {"adm_id", "adm_nome", "adm_senha"};
 
         //Contexto do banco
         SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = null;
+        try{
+            //Cria um cursor(quantidade de dados recebidos) e faz o select
+            cursor = db.query(
+                    //Tabela(FROM)
+                    NOME_TABELA,
+                    //Dados (SELECT)
+                    campos,
+                    //Condição(WHERE)
+                    "adm_nome = ? AND adm_senha = ?",
+                    //Dado que vai no lugar do WHERE
+                    parametro,
+                    //Outros,(Group by, having, oder by) neste ordem, mas no caso, tudo vazio
+                    null,
+                    null,
+                    null
+            );
+        }
+        catch (Exception ex){
+            Log.e("Erro do cursor do usuário e senha: ", ex.getMessage());
+        }
 
-        //Cria um cursor(quantidade de dados recebidos) e faz o select
-        Cursor cursor = db.query(
-                //Tabela(FROM)
-                NOME_TABELA,
-                //Dados (SELECT)
-                campos,
-                //Condição(WHERE)
-                "adm_nome = ? AND adm_senha = ?",
-                //Dado que vai no lugar do WHERE
-                parametro,
-                //Outros,(Group by, having, oder by) neste ordem, mas no caso, tudo vazio
-                null,
-                null,
-                null
-        );
+
+        Log.e("Chegou aqui antes do if", "chegou aqui");
         //Se der certo, haverá como mover para a primeira linha
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst() && cursor != null){
+
+            Log.e("Chegou aqui no if", "chegou aqui");
             admExistente = new Admin(
                     //ID
                     cursor.getInt(0),
@@ -237,9 +247,11 @@ public class AdminDAO extends SQLiteOpenHelper {
 
         //Fecha a conexão com o banco
         db.close();
-
+        if (admExistente != null){
+            return true;
+        }
         //Retorna verdadeiro ou falso com as codinções no próprio return
-        return admExistente != null && Objects.equals(admExistente.getNome(), adm.getNome()) && Objects.equals(admExistente.getSenha(), adm.getSenha());
+        return false;
         //Quando chamar, se o retorno for vazio, anuncia que deu errado a busca
         //Se não for, continua normal
     }
